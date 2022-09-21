@@ -1,5 +1,5 @@
 export enum ElementType {
-    SAND = 'SAND',
-    WATER = 'WATER',
-    DIRT = 'DIRT'
+    SAND = 1,
+    WATER = 2,
+    DIRT = 3
 }
