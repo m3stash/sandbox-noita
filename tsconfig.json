@@ -1,0 +1,21 @@
+{
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "include": [
+    "src/**/*",
+    ".eslintrc.js"
+  ],
+  "exclude": [
+    "node_modules/*",
+    "__sapper__/*",
+    "public/*"
+  ],
+  "compilerOptions": {
+    "target": "esnext",
+    // "strict": true,
+    "declaration": true,
+    "outDir": "public/build"
+  },
+  "env": {
+    "es6": true
+  }
+}
