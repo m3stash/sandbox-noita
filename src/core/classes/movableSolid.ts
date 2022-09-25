@@ -1,3 +1,4 @@
+import { is_svg } from "svelte/types/shared/utils/names";
 import { ElementMaterialState } from "../enums/elementMaterialState";
 import { ElementType } from "../enums/elementType";
 import type { Element } from "./element";
@@ -9,12 +10,19 @@ export class MovableSolid extends Solid {
         super(elementType, color, velocity, isUpdate, lifetime);
     }
 
-    public move(x: number, y: number, elements: Element[][], arraySize: number, elementToDraw: number[][]): void {
-        let newPos: number;
+    public move(x: number, y: number, elements: Element[][], arraySize: number, elementToDraw: number[][], deltaTime: number): void {
         const noboundBottom = y < arraySize - 1;
-        console.log(elements[x][y + 1] && elements[x][y + 1].getElementMaterialState());
         if (noboundBottom && (!elements[x][y + 1] || elements[x][y + 1].getElementMaterialState() == ElementMaterialState.LIQUID)) {
             // bottom
+            const elt = elements[x][y];
+            if (elt) {
+                const speed = 0.5;
+                // const vx = elements[x][y].posX += 0.5;
+                // const vy = elements[x][y].posY += 0.5;
+                const move = 1 * deltaTime * speed;
+                //console.log(move);
+                // console.log(move);
+            }
             this.getNewPosition(x, y, x, y + 1, elements, elementToDraw);
         } else if (noboundBottom && x > 0 && (!elements[x - 1][y + 1] || elements[x - 1][y + 1].getElementMaterialState() == ElementMaterialState.LIQUID)) {
             // Left bottom
@@ -33,6 +41,8 @@ export class MovableSolid extends Solid {
             elements[currentX][currentY] = null;
             elementToDraw[currentX][currentY] = 0;
             elementToDraw[nextX][nextY] = Number(ElementType[elt.getElementType()]);
+            elt.posX = nextX;
+            elt.posY = nextY;
             elt.setElementHasMove(true);
             return;
         }

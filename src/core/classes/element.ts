@@ -1,15 +1,16 @@
 import type { ElementMaterialState } from '../enums/elementMaterialState';
 import type { ElementType } from '../enums/elementType';
-import type Vector2 from './vector2';
 
 export abstract class Element {
     private color: string;
-    private velocity: number;
     private elementHasMove: boolean;
     private lifetime: number;
     private elementType: ElementType;
     private elementMaterialState: ElementMaterialState;
     private toDestroy = false;
+    private velocity: number;
+    public posX: number;
+    public posY: number;
 
     constructor(elementType: ElementType, color: string, velocity: number, elementHasMove: boolean = false, lifetime: number) {
         this.color = color;
@@ -58,5 +59,5 @@ export abstract class Element {
         elements[nextX][nextY] = currentElt;
     }
 
-    abstract move(x: number, y: number, elements: Element[][], arraySize: number, elementToDraw: number[][]): void;
+    abstract move(x: number, y: number, elements: Element[][], arraySize: number, elementToDraw: number[][], deltaTime: number): void;
 }
