@@ -36,12 +36,13 @@ export class MovableSolid extends Solid {
             elt.setElementHasMove(true);
             return;
         }
-        if (nextElement.getElementMaterialState() == ElementMaterialState.LIQUID || ElementMaterialState.GAZ) {
+        if (nextElement.getElementMaterialState() == ElementMaterialState.LIQUID) {
             const elt = elements[currentX][currentY];
             elements[nextX][nextY] = elt;
             elements[currentX][currentY] = nextElement;
             elementToDraw[currentX][currentY] = Number(ElementType[nextElement.getElementType()]);
             elementToDraw[nextX][nextY] = Number(ElementType[elt.getElementType()]);
+            // elementToDraw[nextX][nextY] = 30; // sand To Water
             elt.setElementHasMove(true);
             nextElement.setElementHasMove(true);
             return;

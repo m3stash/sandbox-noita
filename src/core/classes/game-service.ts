@@ -5,6 +5,7 @@ import Vector2 from './vector2';
 import { Sand } from './sand';
 import type { Element } from './element';
 import { Water } from './water';
+import { Dirt } from './dirt';
 
 class GameSvc {
 
@@ -62,7 +63,11 @@ class GameSvc {
                 this.elements[mouseX][mouseY].setElementHasMove(true);
                 this.elementsToDraw[mouseX][mouseY] = 2;
             }
-
+            if (this.currentElementType == 3) {
+                this.elements[mouseX][mouseY] = new Dirt(ElementType[this.currentElementType], ElementColor[this.currentElementType], 1, false, 0);
+                this.elements[mouseX][mouseY].setElementHasMove(true);
+                this.elementsToDraw[mouseX][mouseY] = 3;
+            }
         }
     }
 
@@ -170,7 +175,15 @@ class GameSvc {
                         this.context.fillRect(x, y, 1, 1);
                     }
                     if (eltToDraw == 2) {
-                        this.context.fillStyle = 'blue';
+                        this.context.fillStyle = 'aqua';
+                        this.context.fillRect(x, y, 1, 1);
+                    }
+                    if (eltToDraw == 3) {
+                        this.context.fillStyle = 'grey';
+                        this.context.fillRect(x, y, 1, 1);
+                    }
+                    if (eltToDraw == 30) {
+                        this.context.fillStyle = 'blueviolet';
                         this.context.fillRect(x, y, 1, 1);
                     }
                     this.elementsToDraw[x][y] = null;
