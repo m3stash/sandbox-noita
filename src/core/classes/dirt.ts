@@ -1,5 +1,4 @@
 import type { ElementType } from "../enums/elementType";
-import { MovableSolid } from "./movableSolid";
 import { StaticSolid } from "./staticSolid";
 
 export class Dirt extends StaticSolid {

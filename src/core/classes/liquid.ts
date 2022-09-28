@@ -1,5 +1,5 @@
 import { ElementMaterialState } from '../enums/elementMaterialState';
-import { ElementType } from '../enums/elementType';
+import type { ElementType } from '../enums/elementType';
 import { Element } from './element';
 
 export abstract class Liquid extends Element {
@@ -9,38 +9,32 @@ export abstract class Liquid extends Element {
         this.setElementMaterialState(ElementMaterialState.LIQUID);
     }
 
-    public move(x: number, y: number, elements: Element[][], arraySize: number, elementToDraw: number[][]): void {
-        let newPos: number;
+    public move(x: number, y: number, elements: Element[][], arraySize: number, elementToDraw: number[][], deltaTime: number): void {
+
         const noboundBottom = y < arraySize - 1;
-        if (noboundBottom && !elements[x][y + 1]) {
-            // Down
-            this.getNewPosition(x, y, x, y + 1, elements, elementToDraw);
-        } else if (noboundBottom && x > 0 && !elements[x - 1][y + 1]) {
-            // Left bottom
-            this.getNewPosition(x, y, x - 1, y + 1, elements, elementToDraw);
-        } else if (noboundBottom && x < arraySize - 1 && !elements[x + 1][y + 1]) {
-            // Right bottom
-            this.getNewPosition(x, y, x + 1, y + 1, elements, elementToDraw);
-        } else if (x > 0 && !elements[x - 1][y]) {
-            // Left
-            this.getNewPosition(x, y, x - 1, y, elements, elementToDraw);
-        } else if (x < arraySize - 1 && !elements[x + 1][y]) {
-            // Right
-            this.getNewPosition(x, y, x + 1, y, elements, elementToDraw);
+
+        if (y + 1 < arraySize && (!elements[x][y + 1])) { // Down
+            const yPosByGravity = this.checkBottom(deltaTime, x, y, elements, arraySize);
+            this.setNewPosition(x, y, x, yPosByGravity, elements, elementToDraw);
+        } else if (noboundBottom && x > 0 && !elements[x - 1][y + 1]) { // Left bottom
+            this.setNewPosition(x, y, x - 1, y + 1, elements, elementToDraw);
+        } else if (noboundBottom && x < arraySize - 1 && !elements[x + 1][y + 1]) { // Right bottom
+            this.setNewPosition(x, y, x + 1, y + 1, elements, elementToDraw);
+        } else if (x > 0 && !elements[x - 1][y]) { // Left
+            this.setNewPosition(x, y, x - 1, y, elements, elementToDraw);
+        } else if (x < arraySize - 1 && !elements[x + 1][y]) { // Right
+            this.setNewPosition(x, y, x + 1, y, elements, elementToDraw);
         }
     }
 
-    public getNewPosition(currentX: number, currentY: number, nextX: number, nextY: number, elements: Element[][], elementToDraw: number[][]): void {
-        const nextElement = elements[nextX][nextY];
-        if (!nextElement) {
-            const elt = elements[currentX][currentY];
-            elements[nextX][nextY] = elt;
-            elements[currentX][currentY] = null;
-            elementToDraw[currentX][currentY] = 0;
-            elementToDraw[nextX][nextY] = Number(ElementType[elt.getElementType()]);
-            elt.setElementHasMove(true);
-            return;
-        }
+    public canMove(element: Element): boolean {
+        if (!element) return true;
+        return false;
+    }
+
+    public setNewPosition(currentX: number, currentY: number, nextX: number, nextY: number, elements: Element[][], elementToDraw: number[][]): void {
+        // check if next position is void
+        this.setNewElementPosition(currentX, currentY, nextX, nextY, elements, elementToDraw);
     }
 
 }

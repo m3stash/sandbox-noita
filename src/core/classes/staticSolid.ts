@@ -13,4 +13,8 @@ export class StaticSolid extends Solid {
         return;
     }
 
+    public canMove(element: Element): boolean {
+        return false;
+    }
+
 }

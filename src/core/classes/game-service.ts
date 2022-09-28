@@ -1,7 +1,6 @@
 import { EventBus } from './event-bus';
 import { ElementColor } from "../enums/elementColor";
 import { ElementType } from '../enums/elementType';
-import Vector2 from './vector2';
 import { Sand } from './sand';
 import type { Element } from './element';
 import { Water } from './water';
@@ -44,15 +43,17 @@ class GameSvc {
         if (!this.elements[mouseX][mouseY]) {
             switch (this.currentElementType) {
                 case 1:
-                    this.elements[mouseX][mouseY] = new Sand(ElementType[this.currentElementType], ElementColor[this.currentElementType], 1, false, 0);
+                    this.elements[mouseX][mouseY] = new Sand(ElementType.SAND, ElementColor[this.currentElementType], 1, false, 0);
                     break;
                 case 2:
-                    this.elements[mouseX][mouseY] = new Water(ElementType[this.currentElementType], ElementColor[this.currentElementType], 1, false, 0);
+                    this.elements[mouseX][mouseY] = new Water(ElementType.WATER, ElementColor[this.currentElementType], 1, false, 0);
                     break;
                 case 3:
-                    this.elements[mouseX][mouseY] = new Dirt(ElementType[this.currentElementType], ElementColor[this.currentElementType], 1, false, 0);
+                    this.elements[mouseX][mouseY] = new Dirt(ElementType.DIRT, ElementColor[this.currentElementType], 1, false, 0);
                     break;
             }
+            this.elements[mouseX][mouseY].x = mouseX;
+            this.elements[mouseX][mouseY].y = mouseY;
             this.elements[mouseX][mouseY].setElementHasMove(true);
             this.elementsToDraw[mouseX][mouseY] = this.currentElementType;
         }
@@ -63,13 +64,14 @@ class GameSvc {
         this.canvasWidth = this.canvas.width;
         this.canvasHeight = this.canvas.height;
         this.context = this.canvas.getContext("2d");
+        //this.canvas.addEventListener("click", this.pressEventHandler);
         this.canvas.addEventListener("mousemove", this.pressEventHandler);
         this.canvas.addEventListener("mousedown", () => this.mouseClick = true);
         this.canvas.addEventListener("mouseup", () => this.mouseClick = false);
     }
 
     // to rewrite..
-    private drawFps(): void {
+    /*private drawFps(): void {
         const now = performance.now();
         const delta = now - this.lastFrameTimeStamp;
         this.lastFrameTimeStamp = now;
@@ -80,7 +82,7 @@ class GameSvc {
         this.context.fillRect(0, 0, this.canvas.height, this.canvas.width);
         this.context.fillStyle = 'black';
         this.context.fillText(`FPS: ${Math.floor(fps)}`, 10, 30);
-    }
+    }*/
 
     private init2DArray<T>(array: T[][], size: number): void {
         for (let i: number = 0; i < size; i++) {
@@ -116,12 +118,11 @@ class GameSvc {
         }
         requestAnimationFrame(this.gameLoop.bind(this));
         // }, 1000 / this.fpsMax);
-
     }
 
     private draw(x: number, y: number): void {
         const eltToDraw = this.elementsToDraw[x][y];
-        if (eltToDraw >= 0) {
+        if (eltToDraw != null && eltToDraw >= 0) {
             switch (eltToDraw) {
                 case 0:
                     this.context.clearRect(x, y, 1, 1);
