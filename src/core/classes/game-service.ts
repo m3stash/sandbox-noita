@@ -1,5 +1,5 @@
 import { EventBus } from './event-bus';
-import { ElementColor } from "../enums/elementColor";
+import { PixelColor } from "../enums/pixelColor";
 import { ElementType } from '../enums/elementType';
 import { Sand } from './sand';
 import type { Element } from './element';
@@ -43,13 +43,13 @@ class GameSvc {
         if (!this.elements[mouseX][mouseY]) {
             switch (this.currentElementType) {
                 case 1:
-                    this.elements[mouseX][mouseY] = new Sand(ElementType.SAND, ElementColor[this.currentElementType], 1, false, 0);
+                    this.elements[mouseX][mouseY] = new Sand(1, false, 0);
                     break;
                 case 2:
-                    this.elements[mouseX][mouseY] = new Water(ElementType.WATER, ElementColor[this.currentElementType], 1, false, 0);
+                    this.elements[mouseX][mouseY] = new Water(1, false, 0);
                     break;
                 case 3:
-                    this.elements[mouseX][mouseY] = new Dirt(ElementType.DIRT, ElementColor[this.currentElementType], 1, false, 0);
+                    this.elements[mouseX][mouseY] = new Dirt(1, false, 0);
                     break;
             }
             this.elements[mouseX][mouseY].x = mouseX;

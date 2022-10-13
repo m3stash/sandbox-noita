@@ -1,12 +1,28 @@
-import type { ElementType } from "../enums/elementType";
-import { MovableSolid } from "./movableSolid";
+import { ElementType } from "../enums/elementType";
+import { PixelColor } from "../enums/pixelColor";
+import { Solid } from "./solid";
+import { ElementWeight } from '../enums/elementWeight';
 
-export class Sand extends MovableSolid {
+export class Sand extends Solid {
 
-    constructor(elementType: ElementType, color: string, velocity: number, isUpdate: boolean, lifetime: number) {
-        super(elementType, color, velocity, isUpdate, lifetime);
-        this.setGravity(0.3);
-        // this.setVelocity(0.3);
+    public getColor(): string {
+        return PixelColor.SAND;
+    }
+
+    public getType(): number {
+        return ElementType.SAND;
+    }
+
+    public isStatic(): boolean {
+        return false;
+    }
+
+    public getWeight(): number {
+        return ElementWeight.SAND;
+    }
+
+    constructor(velocity: number, isUpdate: boolean, lifetime: number) {
+        super(velocity, isUpdate, lifetime);
         this.pixelMovePerSecond = 50;
     }
 

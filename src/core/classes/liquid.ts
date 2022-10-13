@@ -1,15 +1,15 @@
 import { ElementMaterialState } from '../enums/elementMaterialState';
-import type { ElementType } from '../enums/elementType';
 import { Element } from './element';
 
 export abstract class Liquid extends Element {
 
-    constructor(elementType: ElementType, color: string, velocity: number, isUpdate: boolean, lifetime: number) {
-        super(elementType, color, velocity, isUpdate, lifetime);
+    constructor(velocity: number, isUpdate: boolean, lifetime: number) {
+        super(velocity, isUpdate, lifetime);
         this.setElementMaterialState(ElementMaterialState.LIQUID);
     }
 
     public move(x: number, y: number, elements: Element[][], arraySize: number, elementToDraw: number[][], deltaTime: number): void {
+        if (this.isStatic()) return;
 
         const noboundBottom = y < arraySize - 1;
 
@@ -28,13 +28,25 @@ export abstract class Liquid extends Element {
     }
 
     public canMove(element: Element): boolean {
-        if (!element) return true;
+        if (!element && !this.isStatic() || element.getElementMaterialState() == ElementMaterialState.LIQUID) return true;
         return false;
     }
 
     public setNewPosition(currentX: number, currentY: number, nextX: number, nextY: number, elements: Element[][], elementToDraw: number[][]): void {
         // check if next position is void
         this.setNewElementPosition(currentX, currentY, nextX, nextY, elements, elementToDraw);
+        // else check if current element can replace the next element
+        if (elements[currentX][currentY] && elements[nextX][nextY].getElementMaterialState() == ElementMaterialState.LIQUID) {
+            const nextElement = elements[nextX][nextY];
+            const elt = elements[currentX][currentY];
+            elements[nextX][nextY] = elt;
+            elements[currentX][currentY] = nextElement;
+            elementToDraw[currentX][currentY] = nextElement.getType();
+            elementToDraw[nextX][nextY] = elt.getType();
+            // elementToDraw[nextX][nextY] = 30; // sand To Water
+            elt.setElementHasMove(true);
+            nextElement.setElementHasMove(true);
+        }
     }
 
 }
